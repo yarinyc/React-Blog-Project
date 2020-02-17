@@ -6,6 +6,17 @@ class PostContainer extends Component {
         super(props);
         this.state = { posts: props.posts }
     }
+
+    static getDerivedStateFromProps(props, state) {
+        if (props.posts !== state.posts) {
+          return {
+            posts: props.posts
+          };
+        }
+    
+        // Return null to indicate no change to state.
+        return null;
+      }
     
     renderPosts = () =>{
         return (
@@ -13,9 +24,7 @@ class PostContainer extends Component {
             {this.state.posts.map((post) =>
                 <li key={post.id} className='post'>
                     <Post
-                        id={post.id}
-                        title={post.title}
-                        content={post.content}
+                        post = {post}
                     />
                 </li>)
             }
