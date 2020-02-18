@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 
-const port = 5000 ;
+const port = 5000;
 
 export const createApiClient = () => {
 	return {
@@ -10,11 +10,12 @@ export const createApiClient = () => {
 		},
 
 		addPost: (post) => {
-			return axios.post(`http://localhost:${port}/api/posts`,post).then((res) => res.data);
+			return axios.post(`http://localhost:${port}/api/posts`, post).then((res) => res.data);
+		},
+
+		deletePost: (postId) => {
+			return axios.delete(`http://localhost:${port}/api/posts`, postId).then((res) => res.data);
 		}
 
 	}
 }
-
-
-
