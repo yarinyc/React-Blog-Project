@@ -14,7 +14,7 @@ export const createApiClient = () => {
 		},
 
 		deletePost: (postId) => {
-			return axios.delete(`http://localhost:${port}/api/posts`, postId).then((res) => res.data);
+			return axios.delete(`http://localhost:${port}/api/posts/${postId}`).then((res) => res.data);
 		}
 
 	}

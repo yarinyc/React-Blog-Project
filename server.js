@@ -4,7 +4,9 @@ const bodyParser = require('body-parser');
 const app = express();
 const port = process.env.PORT || 5000;
 
-const data = require('./data.json');
+let data = require('./data.json');
+
+//setInterval(()=> data = require('./data.json') , 20000);
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({
@@ -23,12 +25,13 @@ app.get('/api/posts', (req, res) => {
 
 app.post('/api/posts', (req, res) => {
 	data.unshift(req.body);
+	res.send(req.body);
 });
 
-app.delete('/api/posts', (req, res) => {
-
-	// error here - req.body is not the post id for some reason (it is {})
-	data.splice(req.body, 1);
+app.delete('/api/posts/:id', (req, res) => {
+	const id = parseInt(req.params.id);
+	data = data.filter( (post) => post.id !== id );
+	res.send({message: "deleted"});
 })
 
 app.listen(port, () => console.log(`Listening on port ${port}...`));

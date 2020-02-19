@@ -15,8 +15,7 @@ import FormPopup from "./components/FormPopup";
 export const api = createApiClient();
 
 function* idMaker() {
-  var index = 4;
-  while (true) yield index++;
+  while (true) yield Date.now();
 }
 
 export var gen = idMaker();
@@ -48,6 +47,10 @@ class App extends Component {
     this.setState({ shouldRender: true });
   };
 
+  handleReRender = () => {
+    this.setState({ shouldRender: true });
+  };
+
 
   renderNavbar = () => {
     return (
@@ -74,7 +77,7 @@ class App extends Component {
     return (
       <main>
         <div className="navbar">{this.renderNavbar()}</div>
-        <PostContainer posts={posts}  handlePost={this.handlePost}/>
+        <PostContainer posts={posts}  handlePost={this.handlePost} handleReRender={this.handleReRender}/>
       </main>
     );
   }

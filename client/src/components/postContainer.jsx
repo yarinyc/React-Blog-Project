@@ -21,19 +21,19 @@ class PostContainer extends Component {
         posts: props.posts
       };
     }
-
     // Return null to indicate no change to state.
     return null;
   }
 
   handleDelete = postId => {
-    const newPosts = this.state.posts.filter(post => post.id !== postId);
-     this.setState({ posts:newPosts });
+    //const newPosts = this.state.posts.filter(post => post.id !== postId);
+    //this.setState({ posts:newPosts });
 
-     //deletePost of api does not work - req.body is falsely {} 
-     api.deletePost(postId);
-     this.props.handlePost();
-     window.location.reload();
+    //deletePost of api does not work - req.body is falsely {} 
+    api.deletePost(postId);
+    this.props.handleReRender();
+    //this.setState({shouldRender: true});
+    //window.location.reload();
   };
 
   renderPosts = () => {
