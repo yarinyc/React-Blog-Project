@@ -1,16 +1,12 @@
 import React, { Component } from "react";
-
-//import logo from './logo.svg';
-
 import "./App.scss";
-
-//import './api.js';
 import { createApiClient } from "./api.js";
-
 import "bootstrap/dist/css/bootstrap.min.css";
 import { Navbar, Nav, Button, Form, FormControl } from "react-bootstrap";
 import PostContainer from "./components/postContainer";
 import FormPopup from "./components/FormPopup";
+import LoginPopup from "./components/LoginPopUp";
+import RegisterPopup from "./components/registerPopUp";
 
 export const api = createApiClient();
 
@@ -25,34 +21,59 @@ class App extends Component {
     super(props);
     this.state = {
       posts: [],
-      shouldRender: false
+      shouldRender: false,
+      userName:'',
+      loggedIn: false,
+      admin: false
     };
   }
 
   async componentDidMount() {
     const posts = await api.getPosts();
+    const meta = await api.getInit();
     this.setState({
-      posts: posts
+      posts: posts,
+      loggedIn: meta.loggedIn,
+      admin: meta.admin
     });
   }
 
   async componentDidUpdate(prevProps, prevState) {
     if (prevState.shouldRender !== this.state.shouldRender) {
       const newPosts = await api.getPosts();
-      this.setState({ posts: newPosts, shouldRender: false });
+      this.setState((state) => ({ posts: newPosts, shouldRender: false }));
     }
   }
 
   handlePost = () => {
-    this.setState({ shouldRender: true });
+    this.setState((state) => ({ shouldRender: true }));
   };
+
+  handleLogin = (admin, userName) => {
+    this.setState((state) => ({ loggedIn: true, admin: admin, userName: userName }));
+  };
+
+  handleLogout = () => {
+    api.logout(this.state.userName);
+    this.setState((state) => ({ loggedIn: false, admin: false ,userName: ''}));
+  }
+
 
   handleReRender = () => {
-    this.setState({ shouldRender: true });
+    this.setState((state) => ({ shouldRender: true }));
   };
 
+  renderButtons = (loggedIn, admin)=>{
+    if(loggedIn)
+      if(admin) return <FormPopup handlePost={this.handlePost} />
+  
+    if (!loggedIn)
+      return <LoginPopup handleLogin={this.handleLogin} />
+    return null
+  }
 
   renderNavbar = () => {
+    const {loggedIn, admin} = this.state;
     return (
       <Navbar bg="dark" variant="dark" expand="lg">
         <Navbar.Brand href="#home">My Blog</Navbar.Brand>
@@ -60,8 +81,10 @@ class App extends Component {
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="mr-auto">
             <Nav.Link href="#about">About</Nav.Link>
+            {!this.state.loggedIn && <RegisterPopup />}
           </Nav>
-          <FormPopup handlePost={this.handlePost} />
+          {this.state.loggedIn && <Button variant="outline-success" onClick={this.handleLogout}>Log out</Button>}
+          {this.renderButtons(loggedIn, admin)}
           <Form inline>
             <FormControl type="text" placeholder="Search" className="mr-sm-2" />
             <Button variant="outline-success">Search</Button>
@@ -72,12 +95,11 @@ class App extends Component {
   };
 
   render() {
-    const { posts } = this.state;
-    //console.log(posts)
+    const { posts, loggedIn, admin } = this.state;
     return (
       <main>
         <div className="navbar">{this.renderNavbar()}</div>
-        <PostContainer posts={posts}  handlePost={this.handlePost} handleReRender={this.handleReRender}/>
+        <PostContainer posts={posts}  handlePost={this.handlePost} handleReRender={this.handleReRender} loggedIn={loggedIn} admin={admin} />
       </main>
     );
   }

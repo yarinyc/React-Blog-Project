@@ -12,7 +12,6 @@ class Post extends Component {
         post: props.post
       };
     }
-
     // Return null to indicate no change to state.
     return null;
   }
@@ -25,9 +24,9 @@ class Post extends Component {
           <h5 className="title">{post.title}</h5>
           <div className="content">{post.content}</div>
         </div>
-        <button className="btn btn-sm m-2" onClick={() => this.props.onDelete(post.id)}>
+        {this.props.loggedIn && this.props.admin && <button className="btn btn-sm m-2" onClick={() => this.props.onDelete(post.id)}>
           Delete Post
-        </button>
+        </button>}
       </React.Fragment>
     );
   }

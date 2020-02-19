@@ -8,13 +8,6 @@ class PostContainer extends Component {
     this.state = { posts: props.posts };
   }
 
-//   async componentDidUpdate(prevProps, prevState) {
-//     if (prevState.shouldRender !== this.state.shouldRender) {
-//       const posts = await api.getPosts();
-//       this.setState({ posts: posts, shouldRender: false });
-//     }
-//   }
-
   static getDerivedStateFromProps(props, state) {
     if (props.posts !== state.posts) {
       return {
@@ -26,14 +19,8 @@ class PostContainer extends Component {
   }
 
   handleDelete = postId => {
-    //const newPosts = this.state.posts.filter(post => post.id !== postId);
-    //this.setState({ posts:newPosts });
-
-    //deletePost of api does not work - req.body is falsely {} 
     api.deletePost(postId);
     this.props.handleReRender();
-    //this.setState({shouldRender: true});
-    //window.location.reload();
   };
 
   renderPosts = () => {
@@ -41,7 +28,7 @@ class PostContainer extends Component {
       <ul className="posts">
         {this.state.posts.map(post => (
           <li key={post.id} className="post">
-            <Post post={post} onDelete={this.handleDelete} />
+            <Post post={post} onDelete={this.handleDelete} loggedIn={this.props.loggedIn} admin={this.props.admin} />
           </li>
         ))}
       </ul>
