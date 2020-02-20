@@ -5,15 +5,8 @@ import { api } from "../App";
 class PostContainer extends Component {
   constructor(props) {
     super(props);
-    this.state = { posts: props.posts };
+    this.state = { posts: props.posts, search: props.searchTerm };
   }
-
-//   async componentDidUpdate(prevProps, prevState) {
-//     if (prevState.shouldRender !== this.state.shouldRender) {
-//       const posts = await api.getPosts();
-//       this.setState({ posts: posts, shouldRender: false });
-//     }
-//   }
 
   static getDerivedStateFromProps(props, state) {
     if (props.posts !== state.posts) {
@@ -26,20 +19,24 @@ class PostContainer extends Component {
   }
 
   handleDelete = postId => {
-    //const newPosts = this.state.posts.filter(post => post.id !== postId);
-    //this.setState({ posts:newPosts });
-
-    //deletePost of api does not work - req.body is falsely {} 
     api.deletePost(postId);
     this.props.handleReRender();
-    //this.setState({shouldRender: true});
-    //window.location.reload();
   };
 
-  renderPosts = () => {
+  handleSearch = (toSearch)=> {
+    const { posts } = this.state;
+    let filteredResults = [];
+    toSearch === '' ? filteredResults=posts :
+    filteredResults = posts.filter(post => post.title.toLowerCase().includes(toSearch.toLowerCase()) ||
+                                        post.content.toLowerCase().includes(toSearch.toLowerCase()));
+    return filteredResults;
+  }
+
+  renderPosts = (postsToRender) => {
+
     return (
       <ul className="posts">
-        {this.state.posts.map(post => (
+        {postsToRender.map(post => (
           <li key={post.id} className="post">
             <Post post={post} onDelete={this.handleDelete} />
           </li>
@@ -49,8 +46,8 @@ class PostContainer extends Component {
   };
 
   render() {
-    const len = this.state.posts.length;
-    return <div>{len !== 0 ? this.renderPosts() : <h2>Loading...</h2>}</div>;
+    const filteredResults = this.handleSearch(this.props.searchTerm);
+    return <div>{filteredResults.len !== 0 ? this.renderPosts(filteredResults) : <h2>Loading...</h2>}</div>;
   }
 }
 

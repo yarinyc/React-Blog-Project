@@ -1,10 +1,5 @@
 import React, { Component } from "react";
-
-//import logo from './logo.svg';
-
 import "./App.scss";
-
-//import './api.js';
 import { createApiClient } from "./api.js";
 
 import "bootstrap/dist/css/bootstrap.min.css";
@@ -25,7 +20,8 @@ class App extends Component {
     super(props);
     this.state = {
       posts: [],
-      shouldRender: false
+      shouldRender: false,
+      searchTerm:''
     };
   }
 
@@ -51,6 +47,10 @@ class App extends Component {
     this.setState({ shouldRender: true });
   };
 
+  searchChange = (e) => {
+    this.setState({searchTerm: e.target.value})
+  }
+
 
   renderNavbar = () => {
     return (
@@ -63,8 +63,8 @@ class App extends Component {
           </Nav>
           <FormPopup handlePost={this.handlePost} />
           <Form inline>
-            <FormControl type="text" placeholder="Search" className="mr-sm-2" />
-            <Button variant="outline-success">Search</Button>
+            <FormControl type="text" placeholder="Search" className="mr-sm-2" onChange={this.searchChange}/>
+            <Button variant="outline-info">Search</Button>
           </Form>
         </Navbar.Collapse>
       </Navbar>
@@ -77,7 +77,7 @@ class App extends Component {
     return (
       <main>
         <div className="navbar">{this.renderNavbar()}</div>
-        <PostContainer posts={posts}  handlePost={this.handlePost} handleReRender={this.handleReRender}/>
+        <PostContainer posts={posts} handleReRender={this.handleReRender} searchTerm={this.state.searchTerm} />
       </main>
     );
   }
