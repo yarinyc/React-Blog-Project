@@ -41,11 +41,10 @@ handleSubmit = (e) =>{
   window.location.reload();
 }
 
-
 render() {
   return ( 
     <Popup
-        trigger={<Button variant="outline-info">Post</Button>}
+        trigger={<button className="post-button"> Post </button>}
         modal
         closeOnDocumentClick
       >
