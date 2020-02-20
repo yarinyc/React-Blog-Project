@@ -5,7 +5,7 @@ import { api } from "../App";
 class PostContainer extends Component {
   constructor(props) {
     super(props);
-    this.state = { posts: props.posts, search: props.searchTerm };
+    this.state = { posts: props.posts };
   }
 
   static getDerivedStateFromProps(props, state) {
@@ -23,20 +23,20 @@ class PostContainer extends Component {
     this.props.handleReRender();
   };
 
-  handleSearch = (toSearch)=> {
-    const { posts } = this.state;
-    let filteredResults = [];
-    toSearch === '' ? filteredResults=posts :
-    filteredResults = posts.filter(post => post.title.toLowerCase().includes(toSearch.toLowerCase()) ||
-                                        post.content.toLowerCase().includes(toSearch.toLowerCase()));
-    return filteredResults;
-  }
+  // handleSearch = (toSearch)=> {
+  //   const { posts } = this.state;
+  //   let filteredResults = [];
+  //   toSearch === '' ? filteredResults=posts :
+  //   filteredResults = posts.filter(post => post.title.toLowerCase().includes(toSearch.toLowerCase()) ||
+  //                                       post.content.toLowerCase().includes(toSearch.toLowerCase()));
+  //   return filteredResults;
+  // }
 
-  renderPosts = (postsToRender) => {
+  renderPosts = (posts) => {
 
     return (
       <ul className="posts">
-        {postsToRender.map(post => (
+        {posts.map(post => (
           <li key={post.id} className="post">
             <Post post={post} onDelete={this.handleDelete} loggedIn={this.props.loggedIn} admin={this.props.admin} />
           </li>
@@ -46,8 +46,8 @@ class PostContainer extends Component {
   };
 
   render() {
-    const filteredResults = this.handleSearch(this.props.searchTerm);
-    return <div>{filteredResults.len !== 0 ? this.renderPosts(filteredResults) : <h2>Loading...</h2>}</div>;
+    const {posts} = this.state;
+    return <div>{posts.len !== 0 ? this.renderPosts(posts) : <h2>No posts...</h2>}</div>;
   }
 }
 

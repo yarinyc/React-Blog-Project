@@ -44,7 +44,7 @@ handleSubmit = (e) =>{
 render() {
   return ( 
     <Popup
-        trigger={<button className="post-button"> Post </button>}
+        trigger={<Button variant="outline-info" className="post-button"> Post </Button>}
         modal
         closeOnDocumentClick
       >

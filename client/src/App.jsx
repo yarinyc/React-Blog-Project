@@ -29,8 +29,10 @@ class App extends Component {
     };
   }
 
+  searchDebounce = null;
+
   async componentDidMount() {
-    const posts = await api.getPosts();
+    const posts = await api.getPosts(this.state.searchTerm);
     const meta = await api.getInit();
     this.setState({
       posts: posts,
@@ -41,7 +43,7 @@ class App extends Component {
 
   async componentDidUpdate(prevProps, prevState) {
     if (prevState.shouldRender !== this.state.shouldRender) {
-      const newPosts = await api.getPosts();
+      const newPosts = await api.getPosts(this.state.searchTerm);
       this.setState(state => ({ posts: newPosts, shouldRender: false }));
     }
   }
@@ -67,9 +69,19 @@ class App extends Component {
     this.setState(state => ({ shouldRender: true }));
   };
 
-  searchChange = e => {
-    this.setState({ searchTerm: e.target.value });
-  };
+  //search functionality:
+  onSearch = async (val) => {
+		
+		clearTimeout(this.searchDebounce);
+
+		this.searchDebounce = setTimeout(async () => {
+			const posts = await api.getPosts(val);
+			this.setState({
+        posts: posts,
+        searchTerm: val
+			});
+		}, 300);
+	}
 
   renderButtons = (loggedIn, admin) => {
     if (loggedIn) if (admin) return <FormPopup handlePost={this.handlePost} />;
@@ -91,8 +103,8 @@ class App extends Component {
             <Nav.Link href="#about" id="aboutLink">
               About
             </Nav.Link>
-            {!this.state.loggedIn && <RegisterPopup />}
           </Nav>
+          {!this.state.loggedIn && <RegisterPopup />}
           {this.state.loggedIn && (
             <Button
               variant="outline-info"
@@ -108,7 +120,7 @@ class App extends Component {
               type="text"
               placeholder="Search"
               className="mr-sm-2"
-              onChange={this.searchChange}
+              onChange={(e) => this.onSearch(e.target.value)}
             />
           </Form>
         </Navbar.Collapse>
@@ -127,7 +139,6 @@ class App extends Component {
           handleReRender={this.handleReRender}
           loggedIn={loggedIn}
           admin={admin}
-          searchTerm={this.state.searchTerm}
         />
       </main>
     );

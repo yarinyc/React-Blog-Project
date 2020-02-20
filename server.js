@@ -20,6 +20,12 @@ app.use((_, res, next) => {
 	next();
 });
 
+//apply search terms:
+const applySearch = (search) => {
+	return data.filter(post => post.title.toLowerCase().includes(search.toLowerCase()) ||
+							   post.content.toLowerCase().includes(search.toLowerCase()));
+}
+
 app.get('/api/init',(req,res) => {
 	res.send({loggedIn: meta.loggedIn, admin: meta.admin});
 });
@@ -87,7 +93,9 @@ app.put('/api/users/logout', (req, res) => {
 
 // post related requests:
 app.get('/api/posts', (req, res) => {
-	res.send(data);
+	const search = req.query.search || '';
+	const filteredData = applySearch(search);
+	res.send(filteredData);
 });
 
 app.post('/api/posts', (req, res) => {

@@ -42,10 +42,25 @@
 body {
   font-family: 'Open Sans', sans-serif;
 
-  background-color: #0a253a;
-  padding-top: 100px;
+  //background-color: #0a253a;
+  //padding-top: 100px;
+  padding: 100px;
 
-  padding: 50px;
+  background: linear-gradient(-45deg, #52eed4, #a5bada, #23a6d5, #23cfd5);
+	background-size: 400% 400%;
+  animation: gradient 10s ease infinite;
+  
+  @keyframes gradient {
+    0% {
+      background-position: 0% 50%;
+    }
+    50% {
+      background-position: 100% 50%;
+    }
+    100% {
+      background-position: 0% 50%;
+    }
+  }
 
 
   main {
@@ -91,27 +106,6 @@ body {
       white-space: nowrap;
     }
 
-    .post-button {
-      color: #fff !important;
-      text-decoration: none;
-      background: #55a57d;
-      padding: 7px;
-      border-radius: 5px;
-      display: flexbox;
-      border: none;
-      transition: all 0.4s ease 0s;
-      margin: 0.4em;
-    }
-
-    .post-button:hover {
-      background: #5ab98d;
-      letter-spacing: 1px;
-      -webkit-box-shadow: 0px 5px 40px -10px rgba(0, 0, 0, 0.57);
-      -moz-box-shadow: 0px 5px 40px -10px rgba(0, 0, 0, 0.57);
-      box-shadow: 5px 40px -10px rgba(0, 0, 0, 0.57);
-      transition: all 0.1s ease 0s;
-    }
-
     .formPopup {
       background-color: #e7eaec;
 
@@ -119,7 +113,6 @@ body {
         background-color: #adc5d8;
       }
     }
-
 
     .formPopup {
       background-color: #e7eaec;
@@ -202,4 +195,6 @@ body {
 
     }
   }
+
+  
 }

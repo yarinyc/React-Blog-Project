@@ -6,8 +6,8 @@ const port = 5000;
 export const createApiClient = () => {
 	return {
 
-		getPosts: () => {
-			return axios.get(`http://localhost:${port}/api/posts`).then((res) => res.data);
+		getPosts: (search) => {
+			return axios.get(`http://localhost:${port}/api/posts?search=${search}`).then((res) => res.data);
 		},
 
 		addPost: (post) => {
