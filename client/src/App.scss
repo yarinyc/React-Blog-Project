@@ -58,44 +58,72 @@ body {
     font-weight: 300;
   }
 
+  #registerButton {
+    margin-left: 20px;
+  }
+
+  #brand {
+    margin-right: 20px;
+  }
+
+  #loginButton {
+    margin-right: 20px;
+  }
+
+  #logoutButton {
+    margin-right: 20px;
+  }
+
   .navbar {
     width: 100%;
     border-radius: 8px;
     margin-bottom: 14px;
     display: flex;
 
-  .post-button {
-    color: #fff !important;
-    text-decoration: none;
-    background: #55a57d;
-    padding: 7px;
-    border-radius: 5px;
-    display: flexbox;
-    border: none;
-    transition: all 0.4s ease 0s;
-    margin: 0.4em ;
-    }
-    
-  .post-button:hover {
-    background: #5ab98d;
-    letter-spacing: 1px;
-    -webkit-box-shadow: 0px 5px 40px -10px rgba(0,0,0,0.57);
-    -moz-box-shadow: 0px 5px 40px -10px rgba(0,0,0,0.57);
-    box-shadow: 5px 40px -10px rgba(0,0,0,0.57);
-    transition: all 0.1s ease 0s;
+    .navbar-brand {
+      display: inline-block;
+      padding-top: .3125rem;
+      padding-bottom: .3125rem;
+      margin-right: 1rem;
+      margin-bottom: 0.25rem;
+      font-size: 1.25rem;
+      line-height: inherit;
+      white-space: nowrap;
     }
 
-  .formPopup{
-    background-color: #e7eaec;
-
-    .form-control{
-      background-color: #adc5d8;				
+    .post-button {
+      color: #fff !important;
+      text-decoration: none;
+      background: #55a57d;
+      padding: 7px;
+      border-radius: 5px;
+      display: flexbox;
+      border: none;
+      transition: all 0.4s ease 0s;
+      margin: 0.4em;
     }
-  }
+
+    .post-button:hover {
+      background: #5ab98d;
+      letter-spacing: 1px;
+      -webkit-box-shadow: 0px 5px 40px -10px rgba(0, 0, 0, 0.57);
+      -moz-box-shadow: 0px 5px 40px -10px rgba(0, 0, 0, 0.57);
+      box-shadow: 5px 40px -10px rgba(0, 0, 0, 0.57);
+      transition: all 0.1s ease 0s;
+    }
+
+    .formPopup {
+      background-color: #e7eaec;
+
+      .form-control {
+        background-color: #adc5d8;
+      }
+    }
 
 
     .formPopup {
       background-color: #e7eaec;
+
       .form-control {
         background-color: #adc5d8;
       }
@@ -105,8 +133,8 @@ body {
 
   .btn-outline-info {
     margin: 10px;
-}
-  
+  }
+
   .posts {
 
     margin: 0;
