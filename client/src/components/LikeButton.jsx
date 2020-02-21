@@ -28,7 +28,7 @@ class LikeButton extends Component {
         >
           <span role="img" aria-label="heart">
             ❤️
-          </span>{" "}
+          </span>
           {likes}
         </Button>
       </div>

@@ -24,7 +24,7 @@ class Post extends Component {
         <div className="post">
           <h5 className="title">{post.title}</h5>
           <div className="content">{post.content}</div>
-          <div><LikeButton className="likeButton"/></div>
+          {this.props.loggedIn && <div><LikeButton className="likeButton"/></div>}
         </div>
         {this.props.loggedIn && this.props.admin && <button className="btn btn-sm m-2" id="deleteBtn" onClick={() => this.props.onDelete(post.id)}>
           Delete Post
