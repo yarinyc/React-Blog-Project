@@ -52,17 +52,22 @@ class App extends Component {
     this.setState(state => ({ shouldRender: true }));
   };
 
-  handleLogin = (admin, userName) => {
+  handleLogin = (admin,userName) => {
     this.setState(state => ({
       loggedIn: true,
       admin: admin,
       userName: userName
     }));
+    
   };
 
   handleLogout = () => {
-    api.logout(this.state.userName);
-    this.setState(state => ({ loggedIn: false, admin: false, userName: "" }));
+    api.logout(this.state.userName)
+    .then( (res)=>{
+      if(res.message === "success")
+        this.setState(state => ({ loggedIn: false, admin: false, userName: "" }));
+    });
+    
   };
 
   handleReRender = () => {
