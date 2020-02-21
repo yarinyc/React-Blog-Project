@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import LikeButton from './LikeButton';
 
 class Post extends Component {
   constructor(props) {
@@ -23,8 +24,9 @@ class Post extends Component {
         <div className="post">
           <h5 className="title">{post.title}</h5>
           <div className="content">{post.content}</div>
+          <div><LikeButton className="likeButton"/></div>
         </div>
-        {this.props.loggedIn && this.props.admin && <button className="btn btn-sm m-2" onClick={() => this.props.onDelete(post.id)}>
+        {this.props.loggedIn && this.props.admin && <button className="btn btn-sm m-2" id="deleteBtn" onClick={() => this.props.onDelete(post.id)}>
           Delete Post
         </button>}
       </React.Fragment>

@@ -47,16 +47,18 @@ body {
   padding: 100px;
 
   background: linear-gradient(-45deg, #52eed4, #a5bada, #23a6d5, #23cfd5);
-	background-size: 400% 400%;
+  background-size: 400% 400%;
   animation: gradient 10s ease infinite;
-  
+
   @keyframes gradient {
     0% {
       background-position: 0% 50%;
     }
+
     50% {
       background-position: 100% 50%;
     }
+
     100% {
       background-position: 0% 50%;
     }
@@ -147,7 +149,15 @@ body {
       transition: box-shadow .1s ease-in-out;
       position: relative;
 
-      .btn {
+      .likeButton {
+        margin-right: 125px;
+        border: 1px solid #fff;
+        position: absolute;
+        bottom: 8px;
+        right: 20px;
+      }
+
+      #deleteBtn {
         width: 10%;
         background-color: rgb(192, 206, 236);
         box-shadow: 0 2px 2px 1px #e1e5e8;
@@ -196,5 +206,5 @@ body {
     }
   }
 
-  
+
 }
