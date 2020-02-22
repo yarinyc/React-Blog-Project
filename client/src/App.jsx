@@ -55,7 +55,6 @@ class App extends Component {
   };
 
   handleLogin = (admin, userName) => {
-    console.log(userName);
     this.setState(state => ({
       loggedIn: true,
       admin: admin,
@@ -64,8 +63,6 @@ class App extends Component {
   };
 
   handleLogout = () => {
-    console.log("LOGOUT");
-    console.log("NAME IS ->",this.state.userName);
     api.logout(this.state.userName).then(res => {
       if (res.message === "success") {
         this.setState(state => ({
@@ -73,21 +70,9 @@ class App extends Component {
           admin: false,
           userName: ""
         }));
-        console.log("LOGOUT2");
-      } else if (res.message === "failed") console.log("LOGOUT3");
-    }).catch(console.log("ERROR IN LOGOUT"));
+      }
+    });
   };
-
-  // handleLogout = () => {
-  //   console.log("LOGOUT");
-  //   console.log("NAME IS ->", this.state.userName);
-  //   api.logout(this.state.userName).then(res => )
-  //   this.setState(state => ({
-  //     loggedIn: false,
-  //     admin: false,
-  //     userName: ""
-  //   }));
-  // };
 
   handleReRender = () => {
     this.setState(state => ({ shouldRender: true }));
