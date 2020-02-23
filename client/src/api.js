@@ -32,7 +32,10 @@ export const createApiClient = () => {
 
 		getInit: () => {
 			return axios.get(`http://localhost:${port}/api/init`).then((res) => res.data);
-		}
+		},
 
+		likePost: (postId, userName, likeStr) => {
+			return axios.put(`http://localhost:${port}/api/posts/${postId}`, {userName: userName, likeStr: likeStr}).then((res) => res.data);
+		}
 	}
 }

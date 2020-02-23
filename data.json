@@ -1,18 +1,24 @@
 [{
         "id": 1,
         "title": "first post",
-        "content": "hello"
+        "content": "hello",
+        "likes": 0,
+        "likedBy": []
     },
 
     {
         "id": 2,
         "title": "second post",
-        "content": "world"
+        "content": "world",
+        "likes": 0,
+        "likedBy": []
     },
 
     {
         "id": 3,
         "title": "bla post",
-        "content": "bla"
+        "content": "bla",
+        "likes": 0,
+        "likedBy": []
     }
 ]

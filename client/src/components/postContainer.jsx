@@ -24,22 +24,13 @@ class PostContainer extends Component {
     this.props.handleReRender();
   };
 
-  // handleSearch = (toSearch)=> {
-  //   const { posts } = this.state;
-  //   let filteredResults = [];
-  //   toSearch === '' ? filteredResults=posts :
-  //   filteredResults = posts.filter(post => post.title.toLowerCase().includes(toSearch.toLowerCase()) ||
-  //                                       post.content.toLowerCase().includes(toSearch.toLowerCase()));
-  //   return filteredResults;
-  // }
-
   renderPosts = (posts) => {
 
     return (
       <ul className="posts">
         {posts.map(post => (
           <li key={post.id} className="post">
-            <Post post={post} onDelete={this.handleDelete} loggedIn={this.props.loggedIn} admin={this.props.admin} userName={this.props.userName} postId={post.id} />
+            <Post post={post} onDelete={this.handleDelete} loggedIn={this.props.loggedIn} admin={this.props.admin} userName={this.props.userName} />
           </li>
         ))}
       </ul>

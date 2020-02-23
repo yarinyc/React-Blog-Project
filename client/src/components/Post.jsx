@@ -20,14 +20,12 @@ class Post extends Component {
   render() {
     const { post } = this.state;
 
-    console.log(this.props.postId);
-
     return (
       <React.Fragment>
         <div className="post">
           <h5 className="title">{post.title}</h5>
           <div className="content">{post.content}</div>
-          {this.props.loggedIn && <div><LikeButton className="likeButton" userName={this.props.userName} postId={this.props.postId}/></div>}
+          {this.props.loggedIn && <div><LikeButton className="likeButton" userName={this.props.userName} post={post}/></div>}
         </div>
         {this.props.loggedIn && this.props.admin && <button className="btn btn-sm m-2" id="deleteBtn" onClick={() => this.props.onDelete(post.id)}>
           Delete Post

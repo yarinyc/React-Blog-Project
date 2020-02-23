@@ -1,29 +1,37 @@
 import React, { Component } from "react";
 import { Button } from "react-bootstrap";
+import { api } from "../App";
+
 class LikeButton extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      likes:
-        localStorage.getItem(
-          `likes.${this.props.userName}.${this.props.postId}`
-        ) || 0
+      userName: props.userName,
+      postId: props.post.id,
+      likes: props.post.likes,
+      likedBy: props.post.likedBy
     };
   }
 
   handleLike = () => {
-    if (this.state.likes === 1) return;
-    this.setState(state => ({ likes: 1 }));
-    localStorage.setItem(
-      `likes.${this.props.userName}.${this.props.postId}`,
-      1
-    );
+    const {likedBy, likes, userName, postId} = this.state;
+    if(likedBy.includes(userName)){
+      api.likePost(postId, userName, "unlike")
+      .then( (res) => {
+        this.setState({ likes: likes - 1 ,
+                        likedBy: likedBy.filter( (e) => e !== userName)
+                      });
+      });
+    }
+    else{
+      api.likePost(postId, userName, "like")
+      .then( (res) => {
+        this.setState({ likes: likes + 1 ,
+                        likedBy: likedBy.concat(userName)
+                      });
+      });
+    } 
   };
-
-  //   handleUnlike = () => {
-  //     const newLikes = this.state.likes - 1;
-  //     this.setState(state => ({ likes: newLikes }));
-  //   };
 
   render() {
     const { likes } = this.state;

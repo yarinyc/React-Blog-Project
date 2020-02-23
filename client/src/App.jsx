@@ -64,14 +64,19 @@ class App extends Component {
   };
 
   handleLogout = () => {
-    api.logout(this.state.userName).then(res => {
-      if (res.message === "success") {
-        this.setState(state => ({
-          loggedIn: false,
-          admin: false,
-          userName: ""
-        }));
-      }
+    api.logout(this.state.userName)
+    .then(res => {
+      api.getPosts(this.state.searchTerm)
+      .then((posts) => {
+        if (res.message === "success") {
+          this.setState(state => ({
+            posts: posts,
+            loggedIn: false,
+            admin: false,
+            userName: ""
+          }));
+        }
+      });   
     });
   };
 

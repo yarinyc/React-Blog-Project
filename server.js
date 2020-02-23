@@ -77,18 +77,14 @@ app.post('/api/users/register', (req,res) => {
 
 app.put('/api/users/logout', (req, res) => {
 	const {userName} = req.body;
-	// console.log("USERNAME IS:",userName);
 	const currUser = users.find( u => u.userName === userName);
-	// console.log("USER OBJECT IS: ",currUser);
 	if(currUser === undefined){
 		res.send({message: "failed"})
 		return;
 	}
-	
 	let updatedUser = currUser;
 	updatedUser.loggedIn = false;
 	users = users.map( u => u === currUser ? updatedUser : u);
-	// console.log("TEST ", users);
 	meta = updatedUser;
 	res.send({message: "success"});
 });
@@ -100,8 +96,25 @@ app.get('/api/posts', (req, res) => {
 	res.send(filteredData);
 });
 
+app.put('/api/posts/:id', (req, res) => {
+	const id = parseInt(req.params.id);
+	const {userName, likeStr} = req.body;
+	let currPost = data.find( p => p.id === id);
+	if(likeStr === "like"){
+		currPost.likes = currPost.likes + 1;
+		currPost.likedBy = currPost.likedBy.concat(userName);
+		data = data.map( p => p.id === id  ? currPost : p);
+		res.send({message: "success"});
+	}
+	else{
+		currPost.likes = currPost.likes - 1;
+		currPost.likedBy = currPost.likedBy.filter((e) => e !== userName);
+		data = data.map( p => p.id === id  ? currPost : p);
+		res.send({message: "success"});
+	}
+});
+
 app.post('/api/posts', (req, res) => {
-	// console.log(req.body);
 	data.unshift(req.body);
 	res.send({message: "success" ,addedPost: req.body});
 });
