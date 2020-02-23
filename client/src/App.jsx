@@ -55,7 +55,6 @@ class App extends Component {
   };
 
   handleLogin = (admin, userName) => {
-    console.log(userName);
     this.setState(state => ({
       loggedIn: true,
       admin: admin,
@@ -65,8 +64,6 @@ class App extends Component {
   };
 
   handleLogout = () => {
-    console.log("LOGOUT");
-    console.log("NAME IS ->",this.state.userName);
     api.logout(this.state.userName).then(res => {
       if (res.message === "success") {
         this.setState(state => ({
@@ -74,21 +71,9 @@ class App extends Component {
           admin: false,
           userName: ""
         }));
-        console.log("LOGOUT2");
-      } else if (res.message === "failed") console.log("LOGOUT3");
-    }).catch(console.log("ERROR IN LOGOUT"));
+      }
+    });
   };
-
-  // handleLogout = () => {
-  //   console.log("LOGOUT");
-  //   console.log("NAME IS ->", this.state.userName);
-  //   api.logout(this.state.userName).then(res => )
-  //   this.setState(state => ({
-  //     loggedIn: false,
-  //     admin: false,
-  //     userName: ""
-  //   }));
-  // };
 
   handleReRender = () => {
     this.setState(state => ({ shouldRender: true }));
@@ -134,6 +119,8 @@ class App extends Component {
           </Nav>
           {!this.state.loggedIn && <RegisterPopup />}
           {this.state.loggedIn && (
+            <React.Fragment>
+            <Navbar.Brand >Hello {this.state.userName}</Navbar.Brand>
             <Button
               variant="outline-info"
               id="logoutButton"
@@ -141,6 +128,7 @@ class App extends Component {
             >
               Log out
             </Button>
+            </React.Fragment>
           )}
           {this.renderButtons(loggedIn, admin)}
           <Form inline>
@@ -157,7 +145,7 @@ class App extends Component {
   };
 
   render() {
-    const { posts, loggedIn, admin } = this.state;
+    const { posts, loggedIn, admin, userName } = this.state;
     return (
       <main>
         <div className="navbar">{this.renderNavbar()}</div>
@@ -167,6 +155,7 @@ class App extends Component {
           handleReRender={this.handleReRender}
           loggedIn={loggedIn}
           admin={admin}
+          userName={userName}
         />
       </main>
     );

@@ -3,13 +3,21 @@ import { Button } from "react-bootstrap";
 class LikeButton extends Component {
   constructor(props) {
     super(props);
-    this.state = { likes: 0, updated: false };
+    this.state = {
+      likes:
+        localStorage.getItem(
+          `likes.${this.props.userName}.${this.props.postId}`
+        ) || 0
+    };
   }
 
   handleLike = () => {
-    if (this.state.updated) return;
-    const newLikes = this.state.likes + 1;
-    this.setState(state => ({ likes: newLikes, updated: true }));
+    if (this.state.likes === 1) return;
+    this.setState(state => ({ likes: 1 }));
+    localStorage.setItem(
+      `likes.${this.props.userName}.${this.props.postId}`,
+      1
+    );
   };
 
   //   handleUnlike = () => {
@@ -37,3 +45,4 @@ class LikeButton extends Component {
 }
 
 export default LikeButton;
+

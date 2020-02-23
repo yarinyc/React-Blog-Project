@@ -39,7 +39,7 @@ class PostContainer extends Component {
       <ul className="posts">
         {posts.map(post => (
           <li key={post.id} className="post">
-            <Post post={post} onDelete={this.handleDelete} loggedIn={this.props.loggedIn} admin={this.props.admin} />
+            <Post post={post} onDelete={this.handleDelete} loggedIn={this.props.loggedIn} admin={this.props.admin} userName={this.props.userName} postId={post.id} />
           </li>
         ))}
       </ul>
