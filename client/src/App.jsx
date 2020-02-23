@@ -49,10 +49,13 @@ class App extends Component {
   }
 
   handlePost = () => {
-    this.setState(state => ({ shouldRender: true }));
+    this.setState(state => ({
+      shouldRender: true
+    }));
   };
 
-  handleLogin = (admin,userName) => {
+  handleLogin = (admin, userName) => {
+    console.log(userName);
     this.setState(state => ({
       loggedIn: true,
       admin: admin,
@@ -62,34 +65,54 @@ class App extends Component {
   };
 
   handleLogout = () => {
-    api.logout(this.state.userName)
-    .then( (res)=>{
-      if(res.message === "success")
-        this.setState(state => ({ loggedIn: false, admin: false, userName: "" }));
-    });
-    
+    console.log("LOGOUT");
+    console.log("NAME IS ->",this.state.userName);
+    api.logout(this.state.userName).then(res => {
+      if (res.message === "success") {
+        this.setState(state => ({
+          loggedIn: false,
+          admin: false,
+          userName: ""
+        }));
+        console.log("LOGOUT2");
+      } else if (res.message === "failed") console.log("LOGOUT3");
+    }).catch(console.log("ERROR IN LOGOUT"));
   };
+
+  // handleLogout = () => {
+  //   console.log("LOGOUT");
+  //   console.log("NAME IS ->", this.state.userName);
+  //   api.logout(this.state.userName).then(res => )
+  //   this.setState(state => ({
+  //     loggedIn: false,
+  //     admin: false,
+  //     userName: ""
+  //   }));
+  // };
 
   handleReRender = () => {
     this.setState(state => ({ shouldRender: true }));
   };
 
   //search functionality:
-  onSearch = async (val) => {
-		
-		clearTimeout(this.searchDebounce);
+  onSearch = async val => {
+    clearTimeout(this.searchDebounce);
 
-		this.searchDebounce = setTimeout(async () => {
-			const posts = await api.getPosts(val);
-			this.setState({
+    this.searchDebounce = setTimeout(async () => {
+      const posts = await api.getPosts(val);
+      this.setState({
         posts: posts,
         searchTerm: val
-			});
-		}, 300);
-	}
+      });
+    }, 300);
+  };
 
   renderButtons = (loggedIn, admin) => {
-    if (loggedIn) if (admin) return <FormPopup handlePost={this.handlePost} />;
+    if (loggedIn)
+      if (admin)
+        return (
+          <FormPopup handlePost={this.handlePost} />
+        );
 
     if (!loggedIn) return <LoginPopup handleLogin={this.handleLogin} />;
     return null;
@@ -125,7 +148,7 @@ class App extends Component {
               type="text"
               placeholder="Search"
               className="mr-sm-2"
-              onChange={(e) => this.onSearch(e.target.value)}
+              onChange={e => this.onSearch(e.target.value)}
             />
           </Form>
         </Navbar.Collapse>

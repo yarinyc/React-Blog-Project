@@ -36,9 +36,17 @@ handleSubmit = (e) =>{
     content: content
   }
 
-  api.addPost(newPost);
-  this.props.handlePost();
-  window.location.reload();
+  // console.log(this.props.user);
+
+  api.addPost(newPost).then(res => {
+    if(res.message === "success"){
+      this.props.handlePost();
+      window.location.reload();}}).catch(console.log("NEW ERROR"));
+
+  // console.log(this.props.user + " after POST!");
+  
+  // this.props.handlePost();
+  // window.location.reload();
 }
 
 render() {

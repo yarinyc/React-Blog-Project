@@ -5,7 +5,7 @@ import { api } from "../App";
 class PostContainer extends Component {
   constructor(props) {
     super(props);
-    this.state = { posts: props.posts };
+    this.state = { posts: props.posts, shouldRender: false };
   }
 
   static getDerivedStateFromProps(props, state) {
@@ -17,6 +17,7 @@ class PostContainer extends Component {
     // Return null to indicate no change to state.
     return null;
   }
+  
 
   handleDelete = postId => {
     api.deletePost(postId);
