@@ -77,9 +77,9 @@ app.post('/api/users/register', (req,res) => {
 
 app.put('/api/users/logout', (req, res) => {
 	const {userName} = req.body;
-	console.log("USERNAME IS:",userName);
+	// console.log("USERNAME IS:",userName);
 	const currUser = users.find( u => u.userName === userName);
-	console.log("USER OBJECT IS: ",currUser);
+	// console.log("USER OBJECT IS: ",currUser);
 	if(currUser === undefined){
 		res.send({message: "failed"})
 		return;
@@ -88,7 +88,7 @@ app.put('/api/users/logout', (req, res) => {
 	let updatedUser = currUser;
 	updatedUser.loggedIn = false;
 	users = users.map( u => u === currUser ? updatedUser : u);
-	console.log("TEST ", users);
+	// console.log("TEST ", users);
 	meta = updatedUser;
 	res.send({message: "success"});
 });

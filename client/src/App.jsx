@@ -118,6 +118,8 @@ class App extends Component {
           </Nav>
           {!this.state.loggedIn && <RegisterPopup />}
           {this.state.loggedIn && (
+            <React.Fragment>
+            <Navbar.Brand >Hello {this.state.userName}</Navbar.Brand>
             <Button
               variant="outline-info"
               id="logoutButton"
@@ -125,6 +127,7 @@ class App extends Component {
             >
               Log out
             </Button>
+            </React.Fragment>
           )}
           {this.renderButtons(loggedIn, admin)}
           <Form inline>
@@ -141,7 +144,7 @@ class App extends Component {
   };
 
   render() {
-    const { posts, loggedIn, admin } = this.state;
+    const { posts, loggedIn, admin, userName } = this.state;
     return (
       <main>
         <div className="navbar">{this.renderNavbar()}</div>
@@ -151,6 +154,7 @@ class App extends Component {
           handleReRender={this.handleReRender}
           loggedIn={loggedIn}
           admin={admin}
+          userName={userName}
         />
       </main>
     );
