@@ -25,11 +25,16 @@ class Post extends Component {
         <div className="post">
           <h5 className="title">{post.title}</h5>
           <div className="content">{post.content}</div>
-          {this.props.loggedIn && <div><LikeButton className="likeButton" userName={this.props.userName} post={post}/></div>}
+          <div className="buttons">
+            {this.props.loggedIn && <div><LikeButton className="likeButton" userName={this.props.userName} post={post}/></div>}
+            {this.props.loggedIn && this.props.admin && <button className="deleteBtn" onClick={() => this.props.onDelete(post.id)}>
+              Delete Post
+            </button>}
+          </div>
         </div>
-        {this.props.loggedIn && this.props.admin && <button className="btn btn-sm m-2" id="deleteBtn" onClick={() => this.props.onDelete(post.id)}>
-          Delete Post
-        </button>}
+        <footer>
+					<div className='meta-data'> By {post.by} | { new Date(post.id).toLocaleString()}</div>
+				</footer>
       </React.Fragment>
     );
   }

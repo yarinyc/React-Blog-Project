@@ -33,7 +33,10 @@ class FormPopup extends Component {
     const newPost = {
       id: gen.next().value,
       title: title,
-      content: content
+      content: content,
+      by: this.props.userName,
+      likes: 0,
+      likedBy: []
     };
 
     api

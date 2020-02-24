@@ -101,7 +101,7 @@ class App extends Component {
     if (loggedIn)
       if (admin)
         return (
-          <FormPopup handlePost={this.handlePost} />
+          <FormPopup handlePost={this.handlePost} userName={this.state.userName} />
         );
 
     if (!loggedIn) return <LoginPopup handleLogin={this.handleLogin} />;
