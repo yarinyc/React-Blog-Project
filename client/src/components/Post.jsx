@@ -1,5 +1,6 @@
 import React, { Component } from "react";
-import LikeButton from './LikeButton';
+import { Alert } from "react-bootstrap";
+import LikeButton from "./LikeButton";
 
 class Post extends Component {
   constructor(props) {
@@ -26,15 +27,39 @@ class Post extends Component {
           <h5 className="title">{post.title}</h5>
           <div className="content">{post.content}</div>
           <div className="buttons">
-            {this.props.loggedIn && <div><LikeButton className="likeButton" userName={this.props.userName} post={post}/></div>}
-            {this.props.loggedIn && this.props.admin && <button className="deleteBtn" onClick={() => this.props.onDelete(post.id)}>
-              Delete Post
-            </button>}
+            {this.props.loggedIn && (
+              <div>
+                <LikeButton
+                  className="likeButton"
+                  userName={this.props.userName}
+                  post={post}
+                />
+              </div>
+            )}
+            {this.props.loggedIn && this.props.admin && (
+              <button
+                className="deleteBtn"
+                onClick={() => this.props.onDelete(post.id)}
+              >
+                Delete Post
+              </button>
+            )}
           </div>
         </div>
         <footer>
-					<div className='meta-data'> By {post.by} | { new Date(post.id).toLocaleString()}</div>
-				</footer>
+          <div className="meta-data">
+            {" "}
+            By {post.by} | {new Date(post.id).toLocaleString()}
+            {!this.props.loggedIn && (
+              <Alert id="likeAlert" key={post.id} variant="info">
+                <span role="img" aria-label="heart">
+                  ❤️{" "}
+                </span>
+                {post.likes}
+              </Alert>
+            )}
+          </div>
+        </footer>
       </React.Fragment>
     );
   }

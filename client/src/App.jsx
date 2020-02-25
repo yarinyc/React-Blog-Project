@@ -2,7 +2,14 @@ import React, { Component } from "react";
 import "./App.scss";
 import { createApiClient } from "./api.js";
 import "bootstrap/dist/css/bootstrap.min.css";
-import { Navbar, Nav, Button, Form, FormControl } from "react-bootstrap";
+import {
+  Navbar,
+  Nav,
+  Button,
+  Form,
+  FormControl,
+  Pagination
+} from "react-bootstrap";
 import PostContainer from "./components/postContainer";
 import FormPopup from "./components/FormPopup";
 import LoginPopup from "./components/LoginPopUp";
@@ -25,17 +32,25 @@ class App extends Component {
       userName: "",
       loggedIn: false,
       admin: false,
-      searchTerm: ""
+      searchTerm: "",
+      pageNum: 0,
+      postsPerPage: 5,
+      leftPosts: 0
     };
   }
 
   searchDebounce = null;
 
   async componentDidMount() {
-    const posts = await api.getPosts(this.state.searchTerm);
+    const { posts, leftPosts} = await api.getPosts(
+      this.state.searchTerm,
+      this.state.pageNum,
+      this.state.postsPerPage
+    );
     const meta = await api.getInit();
     this.setState({
       posts: posts,
+      leftPosts: leftPosts,
       loggedIn: meta.loggedIn,
       admin: meta.admin
     });
@@ -43,8 +58,12 @@ class App extends Component {
 
   async componentDidUpdate(prevProps, prevState) {
     if (prevState.shouldRender !== this.state.shouldRender) {
-      const newPosts = await api.getPosts(this.state.searchTerm);
-      this.setState(state => ({ posts: newPosts, shouldRender: false }));
+      const { posts, leftPosts} = await api.getPosts(
+        this.state.searchTerm,
+        this.state.pageNum,
+        this.state.postsPerPage
+      );
+      this.setState(state => ({ posts: posts, leftPosts: leftPosts ,shouldRender: false }));
     }
   }
 
@@ -60,23 +79,29 @@ class App extends Component {
       admin: admin,
       userName: userName
     }));
-    
   };
 
   handleLogout = () => {
-    api.logout(this.state.userName)
-    .then(res => {
-      api.getPosts(this.state.searchTerm)
-      .then((posts) => {
-        if (res.message === "success") {
-          this.setState(state => ({
-            posts: posts,
-            loggedIn: false,
-            admin: false,
-            userName: ""
-          }));
-        }
-      });   
+    api.logout(this.state.userName).then(res => {
+      api
+        .getPosts(
+          this.state.searchTerm,
+          this.state.pageNum,
+          this.state.postsPerPage
+        )
+        .then(posts => {
+          if (res.message === "success") {
+            this.setState(state => ({
+              posts: posts.posts,
+              loggedIn: false,
+              admin: false,
+              userName: "",
+              pageNum: this.state.pageNum,
+              postsPerPage: this.state.postsPerPage,
+              leftPosts: posts.leftPosts
+            }));
+          }
+        });
     });
   };
 
@@ -84,14 +109,35 @@ class App extends Component {
     this.setState(state => ({ shouldRender: true }));
   };
 
+  prevPage = () => {
+    if (this.state.pageNum > 0)
+      this.setState(state => ({
+        pageNum: this.state.pageNum - 1,
+        shouldRender: true
+      }));
+  };
+
+  nextPage = () => {
+    if(this.state.leftPosts > 0)
+      this.setState(state => ({
+        pageNum: this.state.pageNum + 1,
+        shouldRender: true
+      }));
+  };
+
   //search functionality:
   onSearch = async val => {
     clearTimeout(this.searchDebounce);
 
     this.searchDebounce = setTimeout(async () => {
-      const posts = await api.getPosts(val);
+      const { posts, leftPosts } = await api.getPosts(
+        val,
+        this.state.pageNum,
+        this.state.postsPerPage
+      );
       this.setState({
         posts: posts,
+        leftPosts: leftPosts,
         searchTerm: val
       });
     }, 300);
@@ -101,7 +147,10 @@ class App extends Component {
     if (loggedIn)
       if (admin)
         return (
-          <FormPopup handlePost={this.handlePost} userName={this.state.userName} />
+          <FormPopup
+            handlePost={this.handlePost}
+            userName={this.state.userName}
+          />
         );
 
     if (!loggedIn) return <LoginPopup handleLogin={this.handleLogin} />;
@@ -125,14 +174,14 @@ class App extends Component {
           {!this.state.loggedIn && <RegisterPopup />}
           {this.state.loggedIn && (
             <React.Fragment>
-            <Navbar.Brand >Hello {this.state.userName}</Navbar.Brand>
-            <Button
-              variant="outline-info"
-              id="logoutButton"
-              onClick={this.handleLogout}
-            >
-              Log out
-            </Button>
+              <Navbar.Brand>Hello {this.state.userName}</Navbar.Brand>
+              <Button
+                variant="outline-info"
+                id="logoutButton"
+                onClick={this.handleLogout}
+              >
+                Log out
+              </Button>
             </React.Fragment>
           )}
           {this.renderButtons(loggedIn, admin)}
@@ -150,10 +199,15 @@ class App extends Component {
   };
 
   render() {
-    const { posts, loggedIn, admin, userName } = this.state;
+    const { posts, loggedIn, admin, userName, pageNum } = this.state;
     return (
       <main>
         <div className="navbar">{this.renderNavbar()}</div>
+        <Pagination className="pagination">
+          <Pagination.Prev onClick={this.prevPage} />
+          <Pagination.Item>{pageNum + 1}</Pagination.Item>
+          <Pagination.Next onClick={this.nextPage} />
+        </Pagination>
         <PostContainer
           posts={posts}
           handlePost={this.handlePost}

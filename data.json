@@ -23,5 +23,70 @@
         "by": "yarin",
         "likes": 0,
         "likedBy": []
+    },
+
+    
+    {
+        "id": 4,
+        "title": "bla post",
+        "content": "bla",
+        "by": "omer",
+        "likes": 0,
+        "likedBy": []
+    },
+    
+    {
+        "id": 5,
+        "title": "bla post",
+        "content": "bla",
+        "by": "omer",
+        "likes": 0,
+        "likedBy": []
+    },
+    
+    {
+        "id": 6,
+        "title": "bla post",
+        "content": "bla",
+        "by": "omer",
+        "likes": 0,
+        "likedBy": []
+    },
+    
+    {
+        "id": 7,
+        "title": "bla post",
+        "content": "bla",
+        "by": "omer",
+        "likes": 0,
+        "likedBy": []
+    },
+    
+    {
+        "id": 8,
+        "title": "bla post",
+        "content": "bla",
+        "by": "omer",
+        "likes": 0,
+        "likedBy": []
+    },
+
+    
+    {
+        "id": 9,
+        "title": "bla post",
+        "content": "bla",
+        "by": "omer",
+        "likes": 0,
+        "likedBy": []
+    },
+    
+    {
+        "id": 10,
+        "title": "bla post",
+        "content": "bla",
+        "by": "omer",
+        "likes": 0,
+        "likedBy": []
     }
 ]

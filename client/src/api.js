@@ -6,8 +6,8 @@ const port = 5000;
 export const createApiClient = () => {
 	return {
 
-		getPosts: (search) => {
-			return axios.get(`http://localhost:${port}/api/posts?search=${search}`).then((res) => res.data);
+		getPosts: (search, pageNum, postsPerPage) => {
+			return axios.get(`http://localhost:${port}/api/posts?search=${search}&pageNum=${pageNum}&postsPerPage=${postsPerPage}`).then((res) => res.data);
 		},
 
 		addPost: (post) => {
@@ -23,7 +23,9 @@ export const createApiClient = () => {
 		},
 
 		logout: (userName) => {
-			return axios.put(`http://localhost:${port}/api/users/logout`, {userName:userName}).then((res) => res.data);
+			return axios.put(`http://localhost:${port}/api/users/logout`, {
+				userName: userName
+			}).then((res) => res.data);
 		},
 
 		register: (logInRequest) => {
@@ -35,7 +37,10 @@ export const createApiClient = () => {
 		},
 
 		likePost: (postId, userName, likeStr) => {
-			return axios.put(`http://localhost:${port}/api/posts/${postId}`, {userName: userName, likeStr: likeStr}).then((res) => res.data);
+			return axios.put(`http://localhost:${port}/api/posts/${postId}`, {
+				userName: userName,
+				likeStr: likeStr
+			}).then((res) => res.data);
 		}
 	}
 }

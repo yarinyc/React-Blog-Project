@@ -6,7 +6,10 @@ const port = process.env.PORT || 5000;
 
 let data = require('./data.json');
 let users = require('./users.json');
-let meta = {loggedIn: false, admin: false };
+let meta = {
+	loggedIn: false,
+	admin: false
+};
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({
@@ -20,40 +23,59 @@ app.use((_, res, next) => {
 });
 
 //apply search terms:
-const applySearch = (search) => {
-	return data.filter(post => post.title.toLowerCase().includes(search.toLowerCase()) ||
-							   post.content.toLowerCase().includes(search.toLowerCase()));
+const applySearch = (search, pageNum, postsPerPage) => {
+	const tempData = data.slice(pageNum * postsPerPage);
+	const pageData = tempData.slice(0,postsPerPage);
+	return pageData.filter(post => post.title.toLowerCase().includes(search.toLowerCase()) ||
+		post.content.toLowerCase().includes(search.toLowerCase()));
 }
 
-app.get('/api/init',(req,res) => {
-	res.send({loggedIn: meta.loggedIn, admin: meta.admin});
+app.get('/api/init', (req, res) => {
+	res.send({
+		loggedIn: meta.loggedIn,
+		admin: meta.admin
+	});
 });
 
 // user related requests:
 app.put('/api/users/login', (req, res) => {
-	const {userName, password} = req.body;
-	const currUser = users.find( u => u.userName === userName);
-	if(currUser === undefined){
-		res.send({message: "failed"})
+	const {
+		userName,
+		password
+	} = req.body;
+	const currUser = users.find(u => u.userName === userName);
+	if (currUser === undefined) {
+		res.send({
+			message: "failed"
+		})
 		return;
 	}
-	if(currUser.password !== password){
-		res.send({message: "failed", admin: currUser.admin})
+	if (currUser.password !== password) {
+		res.send({
+			message: "failed",
+			admin: currUser.admin
+		})
 		return;
 	}
 	let updatedUser = currUser;
 	updatedUser.loggedIn = true;
-	users = users.map( u => u === currUser ? updatedUser : u)
+	users = users.map(u => u === currUser ? updatedUser : u)
 	meta = updatedUser;
-	res.send({message: "success", admin: currUser.admin, userName: userName});
+	res.send({
+		message: "success",
+		admin: currUser.admin,
+		userName: userName
+	});
 });
 
-app.post('/api/users/register', (req,res) => {
+app.post('/api/users/register', (req, res) => {
 	const registrationData = req.body;
-	const currUser = users.find( u => u.userName === registrationData.userName);
+	const currUser = users.find(u => u.userName === registrationData.userName);
 
-	if(currUser !== undefined){
-		res.send({message: "failed"})
+	if (currUser !== undefined) {
+		res.send({
+			message: "failed"
+		})
 		return;
 	}
 
@@ -71,58 +93,85 @@ app.post('/api/users/register', (req,res) => {
 	// }});
 
 	users.push(registrationData);
-	res.send({message: "success"});
+	res.send({
+		message: "success"
+	});
 
 });
 
 app.put('/api/users/logout', (req, res) => {
-	const {userName} = req.body;
-	const currUser = users.find( u => u.userName === userName);
-	if(currUser === undefined){
-		res.send({message: "failed"})
+	const {
+		userName
+	} = req.body;
+
+	const currUser = users.find(u => u.userName === userName);
+	if (currUser === undefined) {
+		res.send({
+			message: "failed"
+		})
 		return;
 	}
 	let updatedUser = currUser;
 	updatedUser.loggedIn = false;
-	users = users.map( u => u === currUser ? updatedUser : u);
+	users = users.map(u => u === currUser ? updatedUser : u);
 	meta = updatedUser;
-	res.send({message: "success"});
+	res.send({
+		message: "success"
+	});
 });
 
 // post related requests:
 app.get('/api/posts', (req, res) => {
+
+	// console.log(req.body);
+
+	const pageNum= parseInt(req.query.pageNum);
+	const postsPerPage= parseInt(req.query.postsPerPage); 
+
 	const search = req.query.search || '';
-	const filteredData = applySearch(search);
-	res.send(filteredData);
+	const filteredData = applySearch(search, pageNum, postsPerPage);
+	res.send({ posts: filteredData, leftPosts: data.filter(post => !filteredData.includes(post)).filter(post => post.id > filteredData[filteredData.length - 1].id).length } );
 });
 
+//like - unlike handler
 app.put('/api/posts/:id', (req, res) => {
 	const id = parseInt(req.params.id);
-	const {userName, likeStr} = req.body;
-	let currPost = data.find( p => p.id === id);
-	if(likeStr === "like"){
+	const {
+		userName,
+		likeStr
+	} = req.body;
+	let currPost = data.find(p => p.id === id);
+	if (likeStr === "like") {
 		currPost.likes = currPost.likes + 1;
 		currPost.likedBy = currPost.likedBy.concat(userName);
-		data = data.map( p => p.id === id  ? currPost : p);
-		res.send({message: "success"});
-	}
-	else{
+		data = data.map(p => p.id === id ? currPost : p);
+		res.send({
+			message: "success"
+		});
+	} else {
 		currPost.likes = currPost.likes - 1;
 		currPost.likedBy = currPost.likedBy.filter((e) => e !== userName);
-		data = data.map( p => p.id === id  ? currPost : p);
-		res.send({message: "success"});
+		data = data.map(p => p.id === id ? currPost : p);
+		res.send({
+			message: "success"
+		});
 	}
 });
 
 app.post('/api/posts', (req, res) => {
 	data.unshift(req.body);
-	res.send({message: "success" ,addedPost: req.body});
+	res.send({
+		message: "success",
+		addedPost: req.body
+	});
 });
 
 app.delete('/api/posts/:id', (req, res) => {
 	const id = parseInt(req.params.id);
-	data = data.filter( (post) => post.id !== id );
-	res.send({message: "deleted"});
+	data = data.filter((post) => post.id !== id);
+	res.send({
+		message: "deleted"
+	});
 })
 
 app.listen(port, () => console.log(`Listening on port ${port}...`));

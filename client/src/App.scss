@@ -108,14 +108,14 @@ body {
       white-space: nowrap;
     }
 
-      .formPopup {
+    .formPopup {
       background-color: #91b6ce;
 
       .form-control {
         background-color: #99aab8;
       }
     }
-   
+
   }
 
   .btn-outline-info {
@@ -144,7 +144,7 @@ body {
       .buttons {
         display: flex;
         justify-content: space-between;
-          
+
         .likeButton {
           margin-right: 125px;
           border: 1px solid #fff;
@@ -155,18 +155,18 @@ body {
 
         .deleteBtn {
           background-color: rgb(63, 145, 177);
-						border-radius: 6px;
-						border: thin;
-						padding-left: 0.4em;
-						padding-right: 0.4em;
-						color: hsl(213, 58%, 4%);
-						font-weight: 100px;
-						font-size: 18px;
-            margin: 0.3em;
+          border-radius: 6px;
+          border: thin;
+          padding-left: 0.4em;
+          padding-right: 0.4em;
+          color: hsl(213, 58%, 4%);
+          font-weight: 100px;
+          font-size: 18px;
+          margin: 0.3em;
         }
 
-       
-    }
+
+      }
 
       .title {
         margin: 15px 0;
@@ -195,10 +195,21 @@ body {
           margin: 10px 0;
           flex-shrink: 0;
         }
+
+        #likeAlert {
+          position: absolute;
+          top: 130px;
+          right: 20px;
+        }
+
       }
 
 
     }
+  }
+
+  .pagination {
+    margin-left: 48%;
   }
 
 
