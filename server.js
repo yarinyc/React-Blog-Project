@@ -24,10 +24,11 @@ app.use((_, res, next) => {
 
 //apply search terms:
 const applySearch = (search, pageNum, postsPerPage) => {
-	const tempData = data.slice(pageNum * postsPerPage);
-	const pageData = tempData.slice(0,postsPerPage);
-	return pageData.filter(post => post.title.toLowerCase().includes(search.toLowerCase()) ||
-		post.content.toLowerCase().includes(search.toLowerCase()));
+
+	const tempData = data.filter(post => post.title.toLowerCase().includes(search.toLowerCase()) ||
+					 post.content.toLowerCase().includes(search.toLowerCase()));
+	const pageData = tempData.slice(pageNum * postsPerPage, (pageNum+1)*postsPerPage);
+	return pageData;
 }
 
 app.get('/api/init', (req, res) => {
@@ -130,7 +131,7 @@ app.get('/api/posts', (req, res) => {
 
 	const search = req.query.search || '';
 	const filteredData = applySearch(search, pageNum, postsPerPage);
-	res.send({ posts: filteredData, leftPosts: data.filter(post => !filteredData.includes(post)).filter(post => post.id > filteredData[filteredData.length - 1].id).length } );
+	res.send({ posts: filteredData});
 });
 
 //like - unlike handler

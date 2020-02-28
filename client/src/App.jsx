@@ -35,14 +35,13 @@ class App extends Component {
       searchTerm: "",
       pageNum: 0,
       postsPerPage: 5,
-      leftPosts: 0
     };
   }
 
   searchDebounce = null;
 
   async componentDidMount() {
-    const { posts, leftPosts} = await api.getPosts(
+    const { posts} = await api.getPosts(
       this.state.searchTerm,
       this.state.pageNum,
       this.state.postsPerPage
@@ -50,7 +49,6 @@ class App extends Component {
     const meta = await api.getInit();
     this.setState({
       posts: posts,
-      leftPosts: leftPosts,
       loggedIn: meta.loggedIn,
       admin: meta.admin
     });
@@ -58,12 +56,12 @@ class App extends Component {
 
   async componentDidUpdate(prevProps, prevState) {
     if (prevState.shouldRender !== this.state.shouldRender) {
-      const { posts, leftPosts} = await api.getPosts(
+      const { posts} = await api.getPosts(
         this.state.searchTerm,
         this.state.pageNum,
         this.state.postsPerPage
       );
-      this.setState(state => ({ posts: posts, leftPosts: leftPosts ,shouldRender: false }));
+      this.setState(state => ({ posts: posts ,shouldRender: false }));
     }
   }
 
@@ -97,8 +95,7 @@ class App extends Component {
               admin: false,
               userName: "",
               pageNum: this.state.pageNum,
-              postsPerPage: this.state.postsPerPage,
-              leftPosts: posts.leftPosts
+              postsPerPage: this.state.postsPerPage
             }));
           }
         });
@@ -118,11 +115,15 @@ class App extends Component {
   };
 
   nextPage = () => {
-    if(this.state.leftPosts > 0)
-      this.setState(state => ({
-        pageNum: this.state.pageNum + 1,
-        shouldRender: true
-      }));
+    const {searchTerm, pageNum, postsPerPage} = this.state;
+    api.getPosts(searchTerm, pageNum+1, postsPerPage)
+    .then( (res)=>{
+      if(res.posts.length > 0)
+        this.setState( state => ({
+          posts: res.posts,
+          pageNum: this.state.pageNum + 1
+        }));
+    });
   };
 
   //search functionality:
@@ -130,15 +131,15 @@ class App extends Component {
     clearTimeout(this.searchDebounce);
 
     this.searchDebounce = setTimeout(async () => {
-      const { posts, leftPosts } = await api.getPosts(
+      const { posts } = await api.getPosts(
         val,
-        this.state.pageNum,
+        0,
         this.state.postsPerPage
       );
       this.setState({
         posts: posts,
-        leftPosts: leftPosts,
-        searchTerm: val
+        searchTerm: val,
+        pageNum: 0
       });
     }, 300);
   };
