@@ -3,6 +3,7 @@ React Project
 
 Depencdencies: 
 Yarn, React, Axios, Express
+
 To install them, run "npm install" in both the project's root folder and the client folder
 
 To run the web app: 
